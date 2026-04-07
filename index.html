@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tejaswini BK - CS Master's Student</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .light-mode {
+            background: #f7f6f3;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(20, 184, 166, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.04) 0%, transparent 40%);
+            color: #1a1a1a;
+        }
+
+        .dark-mode {
+            background: #0a0a0a;
+            color: #fafafa;
+        }
+
+        .animated-gradient-text {
+            background: linear-gradient(90deg, #14b8a6, #0891b2, #06b6d4, #14b8a6);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 8s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .magnetic {
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .hero-background {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .glass-card {
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(20, 184, 166, 0.08);
+        }
+
+        .dark-mode .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(20, 184, 166, 0.3);
+        }
+
+        /* NEW: FLOATING SHAPES IN HERO */
+        .floating-shapes {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.08;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -80px) rotate(90deg); }
+            50% { transform: translate(-30px, 60px) rotate(180deg); }
+            75% { transform: translate(70px, -40px) rotate(270deg); }
+        }
+
+        /* NEW: ORBITING ICONS */
+        .orbit-container {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .orbit-icon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: counterRotate 30s linear infinite, pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes counterRotate {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 5px 20px rgba(20, 184, 166, 0.3); 
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 8px 30px rgba(20, 184, 166, 0.5); 
+            }
+        }
+
+        .orbit-icon:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+        .orbit-icon:nth-child(2) { right: 0; top: 50%; transform: translateY(-50%); }
+        .orbit-icon:nth-child(3) { bottom: 0; left: 50%; transform: translateX(-50%); }
+        .orbit-icon:nth-child(4) { left: 0; top: 50%; transform: translateY(-50%); }
+
+        .light-mode .orbit-icon {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+        }
+
+        .dark-mode .orbit-icon {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+        }
+
+        .project-card {
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 400px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .project-dot:nth-child(1) { background: #ff5f56; }
+        .project-dot:nth-child(2) { background: #ffbd2e; }
+        .project-dot:nth-child(3) { background: #27c93f; }
+
+        .project-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(20, 184, 166, 0.3);
+        }
+
+        .light-mode .project-card:hover {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark-mode .project-card:hover {
+            box-shadow: 0 20px 50px rgba(20, 184, 166, 0.3);
+        }
+
+        .project-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #14b8a6;
+            transition: gap 0.3s ease;
+        }
+
+        .project-card:hover .project-link {
+            gap: 1rem;
+        }
+
+        .project-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .project-modal {
+            position: relative;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 24px;
+            border: 2px solid rgba(20, 184, 166, 0.3);
+            animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .light-mode .project-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .dark-mode .project-modal {
+            background: rgba(17, 24, 39, 0.95);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .light-mode .modal-close {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .modal-close {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-close:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: linear-gradient(135deg, #14b8a6, #06b6d4);
+        }
+
+        .rotating-text {
+            display: inline-block;
+            position: relative;
+            height: 1.2em;
+            overflow: hidden;
+        }
+
+        .rotating-text span {
+            position: absolute;
+            opacity: 0;
+            animation: rotateWords 12s infinite;
+        }
+
+        .rotating-text span:nth-child(1) { animation-delay: 0s; }
+        .rotating-text span:nth-child(2) { animation-delay: 4s; }
+        .rotating-text span:nth-child(3) { animation-delay: 8s; }
+
+        @keyframes rotateWords {
+            0%, 33.33% { opacity: 1; transform: translateY(0); }
+            33.34%, 100% { opacity: 0; transform: translateY(-100%); }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Firefly particles */
+        .firefly {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #14b8a6;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 3px rgba(20, 184, 166, 0.8);
+            animation: fireflyFloat 15s infinite ease-in-out, fireflyGlow 2s infinite ease-in-out;
+        }
+
+        @keyframes fireflyFloat {
+            0%, 100% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            25% {
+                transform: translate(100px, -80px);
+            }
+            50% {
+                transform: translate(-50px, 120px);
+            }
+            75% {
+                transform: translate(80px, -40px);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fireflyGlow {
+            0%, 100% {
+                box-shadow: 0 0 8px 2px rgba(20, 184, 166, 0.4);
+                background: #14b8a6;
+            }
+            50% {
+                box-shadow: 0 0 20px 5px rgba(20, 184, 166, 1);
+                background: #06b6d4;
+            }
+        }
+
+        /* Hero section gradient overlay for differentiation */
+        .hero-gradient-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.03) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #14b8a6, #0891b2, #06b6d4);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        .theme-toggle-wrapper {
+            position: relative;
+            width: 80px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .light-mode .theme-toggle {
+            background: linear-gradient(135deg, #FDB99B, #87CEEB);
+        }
+
+        .dark-mode .theme-toggle {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+
+        .theme-icon {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            top: 4px;
+            border-radius: 50%;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .sun-icon {
+            left: 4px;
+            background: #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .moon-icon {
+            right: 4px;
+            background: #F0E68C;
+            box-shadow: 0 0 20px rgba(240, 230, 140, 0.3);
+        }
+
+        .light-mode .sun-icon {
+            transform: translateX(0) rotate(0deg);
+            opacity: 1;
+        }
+
+        .light-mode .moon-icon {
+            transform: translateX(50px) rotate(180deg);
+            opacity: 0;
+        }
+
+        .dark-mode .sun-icon {
+            transform: translateX(-50px) rotate(-180deg);
+            opacity: 0;
+        }
+
+        .dark-mode .moon-icon {
+            transform: translateX(0) rotate(0deg);
+            opacity: 1;
+        }
+
+        /* PIXEL TERMINAL - Bottom Right Corner */
+        .pixel-terminal-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 999;
+            opacity: 0.75;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pixel-terminal-container:hover {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        .pixel-terminal {
+            width: 200px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            font-family: 'Courier New', monospace;
+        }
+
+        .terminal-header {
+            background: #2d2d2d;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot:nth-child(1) { background: #ff5f56; }
+        .terminal-dot:nth-child(2) { background: #ffbd2e; }
+        .terminal-dot:nth-child(3) { background: #27c93f; }
+
+        .terminal-title {
+            margin-left: auto;
+            font-size: 9px;
+            color: #888;
+        }
+
+        .terminal-body {
+            background: #1a1a1a;
+            padding: 8px;
+            min-height: 70px;
+            max-height: 90px;
+            overflow: hidden;
+        }
+
+        .terminal-line {
+            font-size: 10px;
+            line-height: 1.5;
+            margin-bottom: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .terminal-prompt {
+            color: #14b8a6;
+            font-weight: bold;
+        }
+
+        .terminal-command {
+            color: #06b6d4;
+        }
+
+        .terminal-output {
+            color: #9ca3af;
+            margin-left: 0;
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 6px;
+            height: 11px;
+            background: #14b8a6;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .typing-text {
+            display: inline;
+            border-right: 2px solid #14b8a6;
+            animation: typing 3s steps(40) infinite, blink-border 0.75s step-end infinite;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @keyframes typing {
+            0% { width: 0; }
+            40% { width: 100%; }
+            60% { width: 100%; }
+            100% { width: 0; }
+        }
+
+        @keyframes blink-border {
+            50% { border-color: transparent; }
+        }
+
+        .profile-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+        }
+
+        .profile-border {
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #14b8a6, #0891b2, #06b6d4, #14b8a6);
+            background-size: 400% 400%;
+            animation: gradientRotate 8s ease infinite;
+            padding: 5px;
+        }
+
+        @keyframes gradientRotate {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .profile-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .light-mode .profile-inner {
+            background: #f7f6f3;
+        }
+
+        .dark-mode .profile-inner {
+            background: #0a0a0a;
+        }
+
+        .profile-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 3rem;
+            line-height: 1.1;
+        }
+
+        .approach-step {
+            position: relative;
+            padding-left: 4rem;
+            margin-bottom: 3rem;
+            transition: all 0.4s ease;
+        }
+
+        .approach-step:hover {
+            transform: translateX(10px);
+        }
+
+        .approach-number {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #14b8a6, #0891b2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .approach-step:hover .approach-number {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(20, 184, 166, 0.6);
+        }
+
+        .approach-step::before {
+            content: '';
+            position: absolute;
+            left: 29px;
+            top: 70px;
+            width: 2px;
+            height: calc(100% - 50px);
+            background: linear-gradient(180deg, #14b8a6, transparent);
+            transition: width 0.3s ease;
+        }
+
+        .approach-step:hover::before {
+            width: 4px;
+            background: linear-gradient(180deg, #14b8a6, #06b6d4);
+        }
+
+        .approach-step:last-child::before {
+            display: none;
+        }
+
+        .cert-badge {
+            position: relative;
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .cert-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, #14b8a6, #0891b2, #06b6d4);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .cert-badge:hover::before {
+            opacity: 1;
+        }
+
+        .cert-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .nav-glass {
+            backdrop-filter: blur(20px) saturate(180%);
+            transition: all 0.3s ease;
+        }
+
+        .light-mode .nav-glass {
+            background: rgba(247, 246, 243, 0.85);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .dark-mode .nav-glass {
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #14b8a6, #0891b2);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .creative-button {
+            position: relative;
+            padding: 1rem 2.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+        }
+
+        .creative-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #14b8a6, #0891b2, #06b6d4);
+            transition: transform 0.4s ease;
+            z-index: -1;
+        }
+
+        .creative-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(20, 184, 166, 0.4);
+        }
+
+        .creative-button:hover::before {
+            transform: scale(1.1);
+        }
+
+        .btn-glass {
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: none;
+        }
+
+        .light-mode .btn-glass {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(20, 184, 166, 0.3);
+        }
+
+        .dark-mode .btn-glass {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(167, 139, 250, 0.3);
+        }
+
+        .btn-glass:hover {
+            transform: translateY(-2px);
+            border-color: rgba(20, 184, 166, 0.6);
+            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                width: 250px;
+                height: 250px;
+            }
+            .section-title {
+                font-size: 2.5rem;
+            }
+            .project-card {
+                min-height: 350px;
+            }
+            .pixel-terminal-container {
+                bottom: 1rem;
+                right: 1rem;
+            }
+            .pixel-terminal {
+                width: 160px;
+            }
+            .terminal-line {
+                font-size: 8px;
+            }
+            .orbit-container {
+                display: none;
+            }
+            .floating-shapes {
+                display: none;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .light-mode ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .dark-mode ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #14b8a6, #0891b2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #0891b2, #06b6d4);
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="scroll-progress"></div>
+    
+    <!-- Pixel Terminal in Bottom Right Corner -->
+    <div class="pixel-terminal-container">
+        <div class="pixel-terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+                <span class="terminal-title">terminal</span>
+            </div>
+            <div class="terminal-body" id="terminal-content">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">tejaswini@portfolio:~$</span>
+                    <span class="terminal-command" id="typing-command"></span>
+                    <span class="terminal-cursor"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Terminal typing animation
+        const commands = [
+            "python train_model.py",
+            "git push origin main",
+            "npm run deploy",
+            "docker build -t ai-model .",
+            "pytorch train --gpu",
+            "jupyter notebook",
+            "kubectl apply -f deploy.yaml"
+        ];
+
+        let commandIndex = 0;
+        let charIndex = 0;
+        let currentCommand = '';
+        let typingTimeout;
+
+        function typeCommand() {
+            const command = commands[commandIndex];
+            const typingElement = document.getElementById('typing-command');
+            
+            if (!typingElement) return;
+
+            if (charIndex < command.length) {
+                currentCommand += command[charIndex];
+                typingElement.textContent = currentCommand;
+                charIndex++;
+                typingTimeout = setTimeout(typeCommand, 100);
+            } else {
+                setTimeout(() => {
+                    charIndex = 0;
+                    currentCommand = '';
+                    commandIndex = (commandIndex + 1) % commands.length;
+                    typeCommand();
+                }, 3000);
+            }
+        }
+
+        // Start terminal animation after page loads
+        setTimeout(() => {
+            typeCommand();
+        }, 1000);
+
+        function Portfolio() {
+            const [isDarkMode, setIsDarkMode] = useState(true);
+            const [scrollProgress, setScrollProgress] = useState(0);
+            const [selectedProject, setSelectedProject] = useState(null);
+            const [greeting, setGreeting] = useState('');
+
+            const pixelHeart = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='3' width='2' height='2' fill='%23FF4655'/%3E%3Crect x='4' y='2' width='2' height='2' fill='%23FF4655'/%3E%3Crect x='6' y='3' width='2' height='2' fill='%23FF4655'/%3E%3Crect x='8' y='2' width='2' height='2' fill='%23FF4655'/%3E%3Crect x='10' y='3' width='2' height='2' fill='%23FF4655'/%3E%3Crect x='2' y='5' width='10' height='2' fill='%23FF4655'/%3E%3Crect x='3' y='7' width='8' height='2' fill='%23FF4655'/%3E%3Crect x='4' y='9' width='6' height='2' fill='%23FF4655'/%3E%3Crect x='5' y='11' width='4' height='2' fill='%23FF4655'/%3E%3Crect x='6' y='13' width='2' height='2' fill='%23FF4655'/%3E%3C/svg%3E";
+
+            useEffect(() => {
+                document.body.className = isDarkMode ? 'dark-mode' : 'light-mode';
+            }, [isDarkMode]);
+
+            useEffect(() => {
+                const hour = new Date().getHours();
+                if (hour < 12) setGreeting('Good morning');
+                else if (hour < 18) setGreeting('Good afternoon');
+                else setGreeting('Good evening');
+            }, []);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = (window.scrollY / scrollTotal) * 100;
+                    setScrollProgress(progress);
+                };
+
+                window.addEventListener('scroll', handleScroll);
+                handleScroll();
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            useEffect(() => {
+                const handleEscape = (e) => {
+                    if (e.key === 'Escape' && selectedProject) {
+                        setSelectedProject(null);
+                    }
+                };
+                window.addEventListener('keydown', handleEscape);
+                return () => window.removeEventListener('keydown', handleEscape);
+            }, [selectedProject]);
+
+            // Lazy loading with Intersection Observer for performance
+            useEffect(() => {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '50px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, observerOptions);
+
+                // Observe all reveal elements
+                const reveals = document.querySelectorAll('.reveal');
+                reveals.forEach(element => observer.observe(element));
+
+                return () => {
+                    reveals.forEach(element => observer.unobserve(element));
+                };
+            }, []);
+
+            const projects = [
+                {
+                    id: 1,
+                    title: "Multimodal Tool Wear Prediction (Minape)",
+                    description: "Implemented Minape architecture in PyTorch to process 9 modalities for industrial wear detection. Achieved 91% classification accuracy and 40.9 µm MAE on Nonastreda dataset using 10-fold cross-validation.",
+                    tech: ["PyTorch", "Transformers", "Patch Embedding", "Multi-head Attention", "TempMixer"],
+                    github: "https://github.com/tejaswinibk910/multimodal-isotropic-model",
+                    details: {
+                        overview: "Developed Minape (Multimodal Isotropic Neural Architecture with Patch Embedding) to process 9 modalities: chip/tool/workpiece images and force scalograms/spectrograms. Designed patch embedding layers, isotropic transformer with multi-head self-attention, and TempMixer fusion module with sample-adaptive importance weights.",
+                        achievements: [
+                            "Achieved 91% classification accuracy and 40.9 µm MAE on Nonastreda dataset",
+                            "Established first benchmark on this newly published dataset with multi-task learning",
+                            "Implemented 10-fold tool-based cross-validation for cross-domain generalization",
+                            "Designed sample-adaptive importance weights for TempMixer fusion module"
+                        ],
+                        period: "Graduate Research",
+                        role: "Research Project"
+                    }
+                },
+                {
+                    id: 2,
+                    title: "Multi-Stage Movie Recommendation System",
+                    description: "Built recommendation engine combining FAISS retrieval, SASRec Transformer, and MMR re-ranking on MovieLens-25M. Achieved 467% CTR improvement with HR@10 7.0% and NDCG@10 3.8%.",
+                    tech: ["FAISS", "PyTorch", "SASRec", "ResNet50", "SentenceTransformers", "MMR"],
+                    github: "https://github.com/tejaswinibk910/multimodal-recsys",
+                    details: {
+                        overview: "Developed production-style recommendation engine on MovieLens-25M dataset (25M ratings, 162K movies). Multi-stage pipeline: FAISS HNSW indexing on 512D multimodal embeddings → 2-layer SASRec Transformer (4 attention heads, 2.1M parameters) → maximal marginal relevance re-ranking.",
+                        achievements: [
+                            "Achieved 359% improvement over retrieval-only baseline",
+                            "Demonstrated 467% CTR improvement through A/B testing simulation",
+                            "Statistical significance with p < 0.0001",
+                            "Combined ResNet50 for images and SentenceTransformers for text embeddings"
+                        ],
+                        period: "2024",
+                        role: "Course Project"
+                    }
+                },
+                {
+                    id: 3,
+                    title: "Research Paper Mentor – AI-Powered Academic Assistant",
+                    description: "Built AI learning platform using FastAPI, Next.js, and TypeScript transforming research PDFs into interactive experiences. Implemented RAG with ChromaDB, 4 tutoring modes, and SM-2 spaced repetition.",
+                    tech: ["FastAPI", "Next.js", "TypeScript", "ChromaDB", "RAG", "Groq", "Anthropic"],
+                    github: "https://github.com/tejaswinibk910/research-paper-mentor",
+                    details: {
+                        overview: "AI-powered learning platform that transforms research PDFs into interactive experiences with Socratic tutoring, adaptive quizzes, and knowledge graphs. Implemented RAG with ChromaDB vector store and sentence-transformers embeddings, integrated Groq/Anthropic LLMs for chat and Ollama for concept extraction.",
+                        achievements: [
+                            "Developed 4 tutoring modes: Socratic, Direct, Hint-based, and Analogy",
+                            "Implemented SM-2 spaced repetition algorithm for optimized learning",
+                            "Built interactive concept graph visualization with semantic chunking",
+                            "JWT-based authentication with secure session management"
+                        ],
+                        period: "2024",
+                        role: "Personal Project"
+                    }
+                },
+                {
+                    id: 4,
+                    title: "Real-Time Distributed Ticketing Platform",
+                    description: "Engineered microservices-based ticket booking system with Redis distributed locking. Achieved zero double-bookings across 10+ concurrent users with 151ms average response time and 96% query optimization.",
+                    tech: ["FastAPI", "PostgreSQL", "Redis", "Docker", "WebSocket"],
+                    github: "https://github.com/tejaswinibk910/concurrent-booking-microservices",
+                    details: {
+                        overview: "Built production-grade distributed ticketing platform with Redis distributed locking using atomic SETNX operations. Containerized 3 microservices with Docker Compose, achieving zero double-bookings and sub-50ms WebSocket latency managing 43,000+ seat inventory.",
+                        achievements: [
+                            "Zero double-bookings across 10+ concurrent users",
+                            "151ms average response time under high concurrency",
+                            "Optimized database queries by 96% (2.5s → 83ms) through composite indexing",
+                            "Real-time WebSocket synchronization with sub-50ms latency",
+                            "N+1 query elimination for improved scalability"
+                        ],
+                        period: "2024",
+                        role: "Course Project"
+                    }
+                }
+            ];
+
+            const skillCategories = {
+                "Languages": ["Python", "C", "C++", "C#", "Java", "JavaScript", "TypeScript", "Golang", "Bash", "HTML/CSS"],
+                "ML/AI Frameworks": ["PyTorch", "TensorFlow", "CUDA", "Scipy", "Obspy", "Scikit-learn", "FAISS", "Pandas", "NumPy", "MPI"],
+                "Databases & Backend": ["PostgreSQL", "MongoDB", "Redis", "AWS S3", "Node.js", "Express.js", "FastAPI", "REST API"],
+                "Tools & Platforms": ["Git", "Docker", "AWS", "SLURM", ".NET", "React", "Next.js", "WebSocket", "Power BI", "Blue Prism"]
+            };
+
+            const techStack = [
+                { name: "Python", icon: "fab fa-python" },
+                { name: "JavaScript", icon: "fab fa-js" },
+                { name: "React", icon: "fab fa-react" },
+                { name: "Node.js", icon: "fab fa-node" },
+                { name: "Docker", icon: "fab fa-docker" },
+                { name: "AWS", icon: "fab fa-aws" },
+                { name: "Git", icon: "fab fa-git-alt" },
+                { name: "Linux", icon: "fab fa-linux" },
+                { name: "Database", icon: "fas fa-database" },
+                { name: "API", icon: "fas fa-plug" },
+                { name: "Cloud", icon: "fas fa-cloud" },
+                { name: "AI/ML", icon: "fas fa-brain" }
+            ];
+
+            const workExperience = [
+                {
+                    role: "Research Assistant",
+                    company: "University of Rochester - Earth Imaging Lab",
+                    period: "Dec 2025 - Present",
+                    description: "Designed and optimized distributed data processing pipeline using MPI-parallelized Python on SLURM HPC cluster, reducing runtime from 5 hours to under 3 minutes (100x+ speedup). Building scalable AWS cloud infrastructure for petabyte-scale seismic data processing. Architected end-to-end ML training infrastructure with GPU kernel optimization and automated dataset versioning.",
+                    technologies: ["Python", "MPI", "SLURM", "AWS", "Docker", "PyTorch", "CUDA", "S3", "boto3"]
+                },
+                {
+                    role: "Research Assistant",
+                    company: "University of Rochester Medical Center",
+                    period: "Jan 2026 - Present",
+                    description: "Developing hybrid spatiotemporal deep learning model for arrhythmia detection in firefighters using single-lead ECG signals. Co-author on paper under review in Expert Systems with Applications. Collaborating with NIST and URMC School of Nursing on ECG data analysis and ISHNE file validation for real-time cardiac risk mitigation.",
+                    technologies: ["PyTorch", "Deep Learning", "CNN-LSTM", "Signal Processing", "ECG Analysis"]
+                },
+                {
+                    role: "Software Engineer",
+                    company: "BNP Paribas ISPL",
+                    period: "Jan 2024 - Aug 2025 (Associate: Jul 2024 - Aug 2025 | Intern: Jan 2024 - Jul 2024)",
+                    description: "Developed and maintained robotic process automations using Blue Prism and Power Automate, reducing manual effort by 70%. Led platform upgrade and migration of ~200 bots with comprehensive regression testing that reduced downtime from weeks to hours. Built Python chatbot to automate IT ticket creation and designed interactive Power BI dashboards.",
+                    technologies: ["Blue Prism", "Power Automate", "Python", ".NET", "C#", "Power BI", "JIRA"]
+                }
+            ];
+
+            return (
+                <>
+                    <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
+
+                    <div className="particles">
+                        {/* Firefly particles */}
+                        {[...Array(40)].map((_, i) => (
+                            <div
+                                key={`firefly-${i}`}
+                                className="firefly"
+                                style={{
+                                    left: `${Math.random() * 100}%`,
+                                    top: `${Math.random() * 100}%`,
+                                    animationDelay: `${Math.random() * 10}s`,
+                                    animationDuration: `${12 + Math.random() * 8}s`
+                                }}
+                            />
+                        ))}
+                    </div>
+
+                    <nav className="fixed top-0 w-full z-50 nav-glass">
+                        <div className="max-w-7xl mx-auto px-6 py-6">
+                            <div className="flex justify-between items-center">
+                                <div className="text-2xl font-bold animated-gradient-text">
+                                    Tejaswini BK
+                                </div>
+                                <div className="hidden md:flex items-center space-x-8">
+                                    {['Experience', 'Education', 'Projects', 'Skills', 'Resume', 'Contact'].map((item) => (
+                                        <a 
+                                            key={item}
+                                            href={item === 'Resume' ? 'resume.html' : `#${item.toLowerCase().replace(' ', '-')}`} 
+                                            className="nav-link text-base font-semibold"
+                                        >
+                                            {item}
+                                        </a>
+                                    ))}
+                                    <div 
+                                        className="theme-toggle-wrapper magnetic"
+                                        onClick={() => setIsDarkMode(!isDarkMode)}
+                                    >
+                                        <div className="theme-toggle">
+                                            <div className="theme-icon sun-icon">☀️</div>
+                                            <div className="theme-icon moon-icon">🌙</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* HERO SECTION WITH ENHANCEMENTS */}
+                    <section className="min-h-screen flex items-center justify-center px-6 pt-20 relative overflow-hidden">
+                        <div className="hero-background"></div>
+                        <div className="hero-gradient-overlay"></div>
+
+                        {/* NEW: Floating 3D Shapes */}
+                        <div className="floating-shapes">
+                            {[...Array(8)].map((_, i) => (
+                                <div
+                                    key={`shape-${i}`}
+                                    className="floating-shape"
+                                    style={{
+                                        left: `${10 + (i * 12)}%`,
+                                        top: `${20 + (i * 8)}%`,
+                                        animationDelay: `${i * 0.5}s`,
+                                        animationDuration: `${15 + (i % 3) * 5}s`
+                                    }}
+                                >
+                                    {i % 3 === 0 ? '○' : i % 3 === 1 ? '△' : '□'}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="max-w-7xl mx-auto w-full relative z-10">
+                            <div className="grid lg:grid-cols-2 gap-20 items-center">
+                                <div>
+                                    <div className="inline-block px-4 py-2 rounded-full glass-card mb-6 hover:scale-105 transition-transform">
+                                        <span className="text-sm font-semibold animated-gradient-text">CS Master's @ University of Rochester</span>
+                                    </div>
+                                    
+                                    <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-tight" style={{letterSpacing: '-0.02em'}}>
+                                        <span className="block text-3xl md:text-4xl opacity-60 font-medium mb-3">
+                                            {greeting} <span style={{ backgroundImage: `url(${pixelHeart})`, display: 'inline-block', width: '32px', height: '32px', verticalAlign: 'middle', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', imageRendering: 'pixelated' }}></span> 👋 I'm Tejaswini
+                                        </span>
+                                        I <span className="animated-gradient-text">create</span>
+                                        <br />
+                                        <span className="rotating-text animated-gradient-text">
+                                            <span>intelligent systems</span>
+                                            <span>innovative solutions</span>
+                                            <span>impactful software</span>
+                                        </span>
+                                    </h1>
+                                    
+                                    <p className="text-xl md:text-2xl mb-8 opacity-80 leading-relaxed">
+                                        Turning complex algorithms into elegant solutions. Passionate about AI, distributed systems, and creating technology that matters.
+                                    </p>
+
+                                    <div className="flex flex-wrap gap-4 mb-10">
+                                        <a href="#projects" className="creative-button bg-gradient-to-r from-teal-600 to-cyan-600 text-white magnetic">
+                                            Explore My Projects
+                                        </a>
+                                        <a href="#contact" className="creative-button btn-glass magnetic">
+                                            Let's Connect
+                                        </a>
+                                    </div>
+                                    
+                                    <div className="flex space-x-5">
+                                        {[
+                                            { icon: 'fa-github', url: 'https://github.com/tejaswinibk910', label: 'GitHub', brand: true },
+                                            { icon: 'fa-linkedin', url: 'https://www.linkedin.com/in/tejaswini-bk-1537b9279/', label: 'LinkedIn', brand: true },
+                                            { icon: 'fa-twitter', url: 'https://twitter.com/yourusername', label: 'Twitter', brand: true },
+                                            { icon: 'fa-envelope', url: 'mailto:tbalamur@ur.rochester.edu', label: 'Email', brand: false }
+                                        ].map((social, i) => (
+                                            <a 
+                                                key={i}
+                                                href={social.url}
+                                                target={social.brand ? "_blank" : "_self"}
+                                                rel={social.brand ? "noopener noreferrer" : ""}
+                                                className="w-14 h-14 glass-card rounded-2xl flex items-center justify-center hover:scale-110 transition-all duration-300"
+                                                title={social.label}
+                                            >
+                                                <i className={`${social.brand ? 'fab' : 'fas'} ${social.icon} text-xl`}></i>
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-center relative">
+                                    {/* NEW: Orbiting Icons */}
+                                    <div className="orbit-container">
+                                        {[
+                                            { icon: 'fa-python', delay: 0 },
+                                            { icon: 'fa-react', delay: 2 },
+                                            { icon: 'fa-node', delay: 4 },
+                                            { icon: 'fa-database', delay: 6 }
+                                        ].map((item, i) => (
+                                            <div
+                                                key={i}
+                                                className="orbit-icon glass-card"
+                                                style={{ animationDelay: `${item.delay}s` }}
+                                            >
+                                                <i className={`fab ${item.icon} text-xl animated-gradient-text`}></i>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    
+                                    <div className="profile-container magnetic">
+                                        <div className="profile-border">
+                                            <div className="profile-inner">
+                                                <img src="./tbalamur.jpeg" alt="Tejaswini BK" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    {/* UPDATED EXPERIENCE SECTION WITH DOTS */}
+                    <section id="experience" className="py-32 px-6">
+                        <div className="max-w-5xl mx-auto">
+                            <h2 className="section-title text-center reveal">
+                                My <span className="animated-gradient-text">Journey</span>
+                            </h2>
+                            
+                            <div className="space-y-12">
+                                {workExperience.map((job, index) => (
+                                    <div key={index} className="glass-card rounded-2xl reveal" style={{ animationDelay: `${index * 0.15}s` }}>
+                                        {/* TERMINAL-STYLE DOTS HEADER */}
+                                        <div className="project-card-header">
+                                            <div className="project-dot"></div>
+                                            <div className="project-dot"></div>
+                                            <div className="project-dot"></div>
+                                        </div>
+                                        
+                                        {/* CONTENT */}
+                                        <div className="p-8">
+                                            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                                <div>
+                                                    <h3 className="text-3xl font-bold mb-2">{job.role}</h3>
+                                                    <p className="text-xl animated-gradient-text font-semibold mb-2">{job.company}</p>
+                                                </div>
+                                                <span className="text-lg opacity-70 font-medium">{job.period}</span>
+                                            </div>
+                                            <p className="text-lg opacity-80 mb-4 leading-relaxed">{job.description}</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {job.technologies.map((tech, i) => (
+                                                    <span key={i} className="px-3 py-1 glass-card rounded-lg text-sm font-medium">
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* UPDATED EDUCATION SECTION WITH DOTS */}
+                    <section id="education" className="py-32 px-6">
+                        <div className="max-w-5xl mx-auto">
+                            <h2 className="section-title text-center reveal">
+                                My <span className="animated-gradient-text">Education</span>
+                            </h2>
+                            
+                            <div className="space-y-8">
+                                <div className="glass-card rounded-2xl reveal">
+                                    {/* TERMINAL-STYLE DOTS HEADER */}
+                                    <div className="project-card-header">
+                                        <div className="project-dot"></div>
+                                        <div className="project-dot"></div>
+                                        <div className="project-dot"></div>
+                                    </div>
+                                    
+                                    {/* CONTENT */}
+                                    <div className="p-8">
+                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                            <div>
+                                                <h3 className="text-3xl font-bold mb-2">Master of Science in Computer Science</h3>
+                                                <p className="text-xl animated-gradient-text font-semibold mb-2">University of Rochester</p>
+                                                <p className="text-base opacity-70">Rochester, NY</p>
+                                            </div>
+                                            <span className="text-lg opacity-70 font-medium mt-2 md:mt-0">Aug 2025 - Dec 2026</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 mt-4">
+                                            <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium">Deep learning</span>
+                                            <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium">Data Mining</span>
+                                            <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium">Computer Security and Architecture</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="glass-card rounded-2xl reveal" style={{ animationDelay: '0.15s' }}>
+                                    {/* TERMINAL-STYLE DOTS HEADER */}
+                                    <div className="project-card-header">
+                                        <div className="project-dot"></div>
+                                        <div className="project-dot"></div>
+                                        <div className="project-dot"></div>
+                                    </div>
+                                    
+                                    {/* CONTENT */}
+                                    <div className="p-8">
+                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                            <div>
+                                                <h3 className="text-3xl font-bold mb-2">Bachelor of Technology in Computer Science</h3>
+                                                <p className="text-xl animated-gradient-text font-semibold mb-2">Amrita School of Engineering</p>
+                                                <p className="text-base opacity-70">Coimbatore, India</p>
+                                            </div>
+                                            <span className="text-lg opacity-70 font-medium mt-2 md:mt-0">Oct 2020 - Jun 2024</span>
+                                        </div>
+                                        <p className="text-lg opacity-80 mb-4 leading-relaxed">
+                                            Graduated with comprehensive foundation in computer science, software engineering, and machine learning. 
+                                            Completed final year project on adaptive malware detection using evolutionary computation.
+                                        </p>
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium">Data Structures & Algorithms</span>
+                                            <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium">Machine Learning</span>
+                                            <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium">Software Engineering</span>
+                                            <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium">Computer Networks</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="projects" className="py-32 px-6 relative">
+                        <div className="max-w-7xl mx-auto">
+                            <h2 className="section-title text-center reveal">
+                                Selected <span className="animated-gradient-text">Projects</span>
+                            </h2>
+                            
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {projects.map((project, index) => (
+                                    <div
+                                        key={project.id}
+                                        className="project-card glass-card reveal"
+                                        style={{ animationDelay: `${index * 0.1}s` }}
+                                        onClick={() => setSelectedProject(project)}
+                                    >
+                                        <div className="project-card-header">
+                                            <div className="project-dot"></div>
+                                            <div className="project-dot"></div>
+                                            <div className="project-dot"></div>
+                                        </div>
+                                        
+                                        <div className="project-content">
+                                            <div>
+                                                <h3 className="text-3xl font-bold mb-3">{project.title}</h3>
+                                                <p className="text-lg mb-4 opacity-80 leading-relaxed">{project.description}</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {project.tech.slice(0, 4).map((tech, i) => (
+                                                        <span key={i} className="px-3 py-1 glass-card rounded-lg text-sm font-medium">
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                    {project.tech.length > 4 && (
+                                                        <span className="px-3 py-1 glass-card rounded-lg text-sm font-medium opacity-60">
+                                                            +{project.tech.length - 4} more
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="mt-6">
+                                                <div className="project-link">
+                                                    <span>View Details</span>
+                                                    <i className="fas fa-arrow-right"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="skills" className="py-32 px-6">
+                        <div className="max-w-6xl mx-auto">
+                            <h2 className="section-title text-center reveal">
+                                <span className="animated-gradient-text">Skills & Expertise</span>
+                            </h2>
+                            
+                            <div className="grid md:grid-cols-2 gap-12">
+                                {Object.entries(skillCategories).map(([category, items], index) => (
+                                    <div key={index} className="reveal" style={{ animationDelay: `${index * 0.1}s` }}>
+                                        <h3 className="text-2xl font-bold mb-6 animated-gradient-text">{category}</h3>
+                                        <div className="flex flex-wrap gap-3">
+                                            {items.map((skill, i) => (
+                                                <span key={i} className="px-4 py-2 glass-card rounded-xl text-sm font-medium hover:scale-105 transition-transform">
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="py-32 px-6">
+                        <div className="max-w-6xl mx-auto">
+                            <h2 className="section-title text-center reveal">
+                                <span className="animated-gradient-text">Tech Stack</span>
+                            </h2>
+                            <p className="text-center text-xl opacity-70 mb-16 reveal">Technologies I work with daily</p>
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                                {techStack.map((tech, index) => (
+                                    <div 
+                                        key={index} 
+                                        className="glass-card p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:scale-105 transition-transform reveal"
+                                        style={{ animationDelay: `${index * 0.05}s` }}
+                                    >
+                                        <i className={`${tech.icon} text-4xl animated-gradient-text`}></i>
+                                        <span className="text-sm font-semibold text-center">{tech.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section id="contact" className="py-32 px-6">
+                        <div className="max-w-5xl mx-auto">
+                            <div className="glass-card p-12 md:p-16 rounded-3xl reveal">
+                                <div className="text-center mb-12">
+                                    <h2 className="text-5xl md:text-6xl font-bold mb-6">
+                                        Let's <span className="animated-gradient-text">Connect</span>
+                                    </h2>
+                                    <p className="text-xl md:text-2xl opacity-80 max-w-2xl mx-auto">
+                                        I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+                                    </p>
+                                </div>
+
+                                <div className="grid md:grid-cols-3 gap-8 mb-12">
+                                    <div className="text-center">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-teal-600 to-cyan-600 flex items-center justify-center">
+                                            <i className="fas fa-envelope text-2xl text-white"></i>
+                                        </div>
+                                        <h3 className="text-lg font-bold mb-2">Email</h3>
+                                        <a href="mailto:tbalamur@ur.rochester.edu" className="text-base animated-gradient-text hover:underline">
+                                            tbalamur@ur.rochester.edu
+                                        </a>
+                                    </div>
+
+                                    <div className="text-center">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center">
+                                            <i className="fas fa-map-marker-alt text-2xl text-white"></i>
+                                        </div>
+                                        <h3 className="text-lg font-bold mb-2">Location</h3>
+                                        <p className="text-base opacity-80">Rochester, NY</p>
+                                    </div>
+
+                                    <div className="text-center">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-600 flex items-center justify-center">
+                                            <i className="fas fa-users text-2xl text-white"></i>
+                                        </div>
+                                        <h3 className="text-lg font-bold mb-2">Social</h3>
+                                        <div className="flex gap-3 justify-center">
+                                            <a href="https://github.com/tejaswinibk910" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform">
+                                                <i className="fab fa-github text-xl"></i>
+                                            </a>
+                                            <a href="https://www.linkedin.com/in/tejaswini-bk-1537b9279/" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform">
+                                                <i className="fab fa-linkedin text-xl"></i>
+                                            </a>
+                                            <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform">
+                                                <i className="fab fa-twitter text-xl"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                    <a href="mailto:tbalamur@ur.rochester.edu" className="creative-button bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-center">
+                                        <i className="fas fa-paper-plane mr-2"></i>Send a Message
+                                    </a>
+                                    <a href="resume.html" className="creative-button btn-glass text-center">
+                                        <i className="fas fa-file-alt mr-2"></i>View Resume
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <footer className="py-12 px-6 glass-card">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                                <p className="opacity-70">© 2025 Tejaswini BK. Crafted with passion.</p>
+                                <p className="text-sm animated-gradient-text font-semibold">Building the future, one line at a time.</p>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {selectedProject && (
+                        <div 
+                            className="project-modal-overlay"
+                            onClick={() => setSelectedProject(null)}
+                        >
+                            <div 
+                                className="project-modal glass-card" 
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="modal-close" onClick={() => setSelectedProject(null)}>
+                                    <i className="fas fa-times text-xl"></i>
+                                </div>
+                                
+                                <div className="p-8">
+                                    <div className="mb-8">
+                                        <h2 className="text-4xl md:text-5xl font-bold mb-4">{selectedProject.title}</h2>
+                                        <div className="flex flex-wrap gap-2 mb-6">
+                                            {selectedProject.tech.map((tech, i) => (
+                                                <span key={i} className="px-4 py-2 glass-card rounded-xl text-sm font-medium">
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <div className="flex gap-4 text-sm opacity-70">
+                                            <span><i className="fas fa-calendar mr-2"></i>{selectedProject.details.period}</span>
+                                            <span><i className="fas fa-user mr-2"></i>{selectedProject.details.role}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-8">
+                                        <h3 className="text-2xl font-bold mb-4 animated-gradient-text">Overview</h3>
+                                        <p className="text-lg opacity-80 leading-relaxed">{selectedProject.details.overview}</p>
+                                    </div>
+
+                                    <div className="mb-8">
+                                        <h3 className="text-2xl font-bold mb-4 animated-gradient-text">Key Achievements</h3>
+                                        <ul className="space-y-3">
+                                            {selectedProject.details.achievements.map((achievement, i) => (
+                                                <li key={i} className="flex items-start gap-3">
+                                                    <i className="fas fa-check-circle text-teal-500 mt-1"></i>
+                                                    <span className="text-lg opacity-80">{achievement}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-4">
+                                        <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="creative-button bg-gradient-to-r from-teal-600 to-cyan-600 text-white">
+                                            <i className="fab fa-github mr-2"></i>
+                                            View on GitHub
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </>
+            );
+        }
+
+        ReactDOM.render(<Portfolio />, document.getElementById('root'));
+    </script>
+</body>
+</html>
