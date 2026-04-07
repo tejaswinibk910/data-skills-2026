@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconciliation Page</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #004822, #007F35);
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            color: black;
+        }
+        h2 {
+            color: #005F30;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .text-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .text-section {
+            width: 48%;
+            text-align: center;
+            background: #F0FFF0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .text-section img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 160px;
+            padding: 12px;
+            border: 2px solid #009A44;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: none;
+            background: #E8F5E9;
+            color: #003300;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 48%;
+        }
+        .btn-container img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 22px;
+            font-size: 16px;
+            color: white;
+            background: #009A44;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 100%;
+        }
+        .btn i {
+            margin-right: 8px;
+        }
+        .btn:hover {
+            background: #005F30;
+            transform: scale(1.07);
+        }
+        .btn.reconcile {
+            background: #005F30;
+            flex-basis: 100%;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .btn.reconcile:hover {
+            background: #003D1F;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>BNP Paribas Themed Reconciliation Page</h2>
+        <div class="text-container">
+            <div class="text-section">
+                <label for="jiraData">JIRA Data:</label>
+                <textarea id="jiraData" placeholder="Enter JIRA data..."></textarea>
+            </div>
+            <div class="text-section">
+                <label for="acetpData">ACETP Data:</label>
+                <textarea id="acetpData" placeholder="Enter ACETP data..."></textarea>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <div class="btn-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Jira_Logo.svg" alt="JIRA Logo">
+                <button class="btn" onclick="loadJIRA()"><i class="fab fa-jira"></i> Load JIRA</button>
+            </div>
+            <div class="btn-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/2910/2910248.png" alt="ACETP Logo">
+                <button class="btn" onclick="loadACETP()"><i class="fas fa-database"></i> Load ACETP</button>
+            </div>
+        </div>
+        
+        <button class="btn reconcile" onclick="reconcile()"><i class="fas fa-sync-alt"></i> Reconcile</button>
+    </div>
+
+    <script>
+        function loadJIRA() {
+            document.getElementById('jiraData').value = "Sample JIRA Data Loaded";
+        }
+        
+        function loadACETP() {
+            document.getElementById('acetpData').value = "Sample ACETP Data Loaded";
+        }
+        
+        function reconcile() {
+            let jiraText = document.getElementById('jiraData').value;
+            let acetpText = document.getElementById('acetpData').value;
+            
+            if (jiraText && acetpText) {
+                alert("Reconciliation Completed!");
+            } else {
+                alert("Please enter data in both fields before reconciling.");
+            }
+        }
+    </script>
+</body>
+</html>
